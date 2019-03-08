@@ -17,7 +17,7 @@ use iron::method;
 
 use std::path::Path;
 
-fn say_hello(req: &mut Request) -> IronResult<Response> {
+fn upload(req: &mut Request) -> IronResult<Response> {
 
     use iron::mime;
     
@@ -49,7 +49,7 @@ fn say_hello(req: &mut Request) -> IronResult<Response> {
 fn main() {
        
     let mut router = Router::new();
-    router.post("", say_hello, "");
+    router.post("", upload, "");
 
     let mut mount = Mount::new();
     mount.mount("/", Static::new(Path::new("src/assets")) );
