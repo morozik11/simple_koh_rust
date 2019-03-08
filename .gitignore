@@ -5,6 +5,7 @@
 /web/src/assets/package-lock.json
 /web/src/assets/public/jquery.js
 /web/src/assets/public/bundle.js
+/web/Cargo.lock
 
 /koh/target/*
 /wrap_koh/target/*
@@ -12,3 +13,7 @@
 /web/src/assets/node_modules/*
 /web/src/assets/fonts/*
 /web/src/assets/bootstrap/*
+/koh/target/*
+/wrap_koh/target/*
+/web/target/*
+
