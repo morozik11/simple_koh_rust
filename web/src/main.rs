@@ -1,4 +1,3 @@
-
 extern crate iron;
 extern crate mount;
 extern crate router;
@@ -35,6 +34,4 @@ fn main() {
     
     Iron::new(mount).http("127.0.0.1:3000").unwrap();
     
-
-
 }
