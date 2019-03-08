@@ -26,12 +26,51 @@ function setFile(event){
 
 	}
 	
-	//console.log(store.getState().list_files);
+	console.log(store.getState().list_files);
 
 }
 
-function show(e){
-    console.log(e);
+function show(name){
+    
+    var listFiles = store.getState().list_files;
+    var file = false;
+
+    for(var i=0; i<listFiles.length; i++){
+        if(listFiles[i].name == name){
+            file = listFiles[i];
+            break;
+        }
+    }
+
+    if(file != false){
+        
+        var data = new FormData();
+        data.append('file', file);
+        data.append('time',new Date());
+
+        $.ajax({
+            url: '/upload/',
+            type: 'POST',
+            data: data,
+            cache: false,
+            dataType: 'json',
+            processData: false, 
+            contentType: false, 
+            success: function(data){
+                
+                console.log(data);
+
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+             
+                console.log(textStatus);
+                console.log(jqXHR);
+                        
+            }
+        });
+
+    }
+
 }
 
 export { setFile, show };
