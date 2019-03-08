@@ -1,0 +1,119 @@
+@font-face {
+	font-family: 'liberation_monoregular'; 
+	src: url("../fonts/LiberationMono-Regular.ttf"); 
+	font-style: normal; 
+	font-weight: normal; 
+	
+} 
+
+html{
+	height:100%;
+}
+
+body{
+	background-color: #efd6cd;
+	font-size: 15px;
+	font-family: "liberation_monoregular", monospace;
+	color: #000;
+	height:100%;
+	border-color: #000;
+	border-width: 5px;
+	border-style: solid;
+	margin: 0;
+	padding: 0;
+}
+
+main{
+	height:100%;
+	width:90%;
+	margin: 0 auto;
+}
+
+a{
+	color: #000;
+	text-decoration: none;
+}
+
+#app{
+	height:100%;
+	width:100%;
+}
+
+.header{
+	padding:10px;
+	margin-bottom: 90px;
+}
+
+.header a {
+	font-size:35px;
+}
+
+.text-center{
+	text-align:center;
+}
+
+.inputs_file{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	cursor: pointer;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	right: 0;
+}
+
+.wrap_files{
+	position:relative
+}
+
+#add_wrap{
+	width: 50%;
+    float: left;
+}
+
+#first_wrap{
+	width: 100%;
+	text-align: center;
+	font-size: 25px;
+	background-color: #e7d9e8;
+	padding: 10px;
+	border-bottom-style: solid;
+	box-shadow: 0px 0px 1px black;
+}
+
+.files_list
+{
+	margin: 0;
+	width: 100%;
+	background-color: #444;
+	color: #fff;
+	display: block;
+	height: 300px;
+	overflow-y: scroll;
+}
+
+.files_list tr td {
+	padding: 10px;
+}
+
+.name_file{
+	color: #ccf3cc;
+}
+
+.size_file{
+	color: #ffb5b5;
+}
+
+.type_file{
+	color: #ffc;
+}
+
+.firts_two_files{
+	
+}
+
+.last_files{
+	
+}
