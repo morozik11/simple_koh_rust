@@ -13,9 +13,11 @@ use router::Router;
 use staticfile::Static;
 use params::{Params, Value};
 use iron::method;
+use std::path::{Path, PathBuf};
 
-
-use std::path::Path;
+use std::fs::File;
+use std::io::BufReader;
+use std::io::prelude::*;
 
 fn upload(req: &mut Request) -> IronResult<Response> {
 
@@ -28,9 +30,21 @@ fn upload(req: &mut Request) -> IronResult<Response> {
     match req.get_ref::<Params>().unwrap().find(&["file"]) {
         
         Some(&Value::File(ref file)) => {   
+            
             let ext = &file.content_type.1;
-            match ext {    
-                Csv =>  println!("{:?}","file"),
+            let s = ext.as_str();
+            
+            match s {    
+                "csv" =>  {
+
+                    let ref_path = PathBuf::from(&file.path);
+                    let os_str = ref_path.into_os_string(); 
+                    let mut data = String::new();
+                    let mut f = File::open(os_str).expect("Unable to open file");
+                    f.read_to_string(&mut data).expect("Unable to read string");
+                    println!("{:?}",data);
+
+                },
                 _ =>    { bool_ = false; }
             }
         },
@@ -38,7 +52,7 @@ fn upload(req: &mut Request) -> IronResult<Response> {
        
     }
     
-    if(bool_ == true){
+    if bool_ == true{
         Ok(Response::with((content_type , status::Ok, "{\"status\":\"ok\"}")))
     } else {
         Ok(Response::with((content_type , status::Ok, "{\"status\":\"error file\"}")))
