@@ -1,52 +1,254 @@
 extern crate rand;
 
+use std::fs::File;
+use std::io::{BufRead, BufReader};
+use std::process;
 use rand::Rng;
 
 
 fn main() {
+    
+    let f = "/home/stas/rust/files/test.csv";
+    
+    let mut vs = create_vectors(&f);
+    
+    let bool_ = check_leng_vectors(&vs);
+    if bool_ == false {
+        
+        process::exit(1);
+        
+    }
 
-    let mut training0 = vec![1222.6,2200.90,2223.9,1200.2];
-    let mut training1 = vec![114.5,167.7,150.3,100.4];
-    let mut training2 = vec![22.5,33.7,44.3,55.4];
-    let mut training3 = vec![1.5,1.7,2.3,22.4];
-    
-    let mut vs = vec![training0,training1,training2,training3];
-    
-    let mut v0 = vec![1.6,1.9,1.9,1.2];
-    let mut v1 = vec![114.5,167.7,150.3,100.4];
-    let mut v2 = vec![1.5,2.7,1.3,3.4];
-    let mut v3 = vec![34.5,65.7,32.3,47.4];
-    let mut v4 = vec![1222.5,2200.7,2223.3,1200.4];
-    let mut v5 = vec![101.5,177.7,157.3,103.4];
-    let mut v6 = vec![1000.5,2000.7,1000.3,1000.4];
-    let mut v7 = vec![1222.5,2200.7,2223.3,1200.4];
-    let mut v8 = vec![2.5,1.7,2.3,1.4];
-    let mut v9 = vec![12.5,10.7,12.3,14.4];
-    let mut v10 = vec![114.5,167.7,150.3,100.4];
-    let mut v11 = vec![1141.5,1677.7,1500.3,1000.4];
-    
-    let mut vs_ = vec![v0,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11];
-    
     /* training */
-    let max_min = common(&vs);
+    let mut train_vectors = get_max_min_vectors(&vs);
+    let average = get_average_vectors(&train_vectors,&vs);
+    
+    train_vectors.extend(average);
+    
+    println!("{:?}",train_vectors);
+    println!("-------------------------------------------------------------------");
+    
+    let max_min = get_max_min(&train_vectors);
     let a_b = get_a_b(&max_min);
-    wrap_normalize(&mut vs, &a_b);
+    wrap_normalize(&mut train_vectors, &a_b);
 
-    let mut new_vs = generate_rand_vs(vs.len(),vs[0].len());
-    wrap_training(&mut vs, &mut new_vs);
+    let mut new_vs = generate_rand_vs(train_vectors.len(),train_vectors[0].len());
+    wrap_training(&mut train_vectors, &mut new_vs);
     /* training */
-    
     
     /*classification*/
-    let max_min_ = common(&vs_);
+    let max_min_ = get_max_min(&vs);
     let a_b_ = get_a_b(&max_min_);
-    wrap_normalize(&mut vs_, &a_b_);
-    classification(&mut new_vs, &mut vs_);
+    wrap_normalize(&mut vs, &a_b_);
+    classification(&mut new_vs, &mut vs);
     /*classification*/
     
 }
 
-fn common(vectors: &Vec<Vec<f32>>) -> (f32,f32) {
+fn check_leng_vectors(vectors: &Vec<Vec<f32>>) -> bool{
+    
+    let leng = vectors[0].len();
+    let mut result = true;
+    
+    for v in vectors {
+        
+        if v.len() < leng {
+            
+            result = false;
+            break;
+            
+        }
+        
+    }
+    
+    result
+    
+}
+
+fn create_vectors(path: &str) -> Vec<Vec<f32>>{
+    
+    let mut file = File::open(path);
+
+    let mut f = match file {
+        Ok(file) => {
+            file = File::open(path);
+            file
+        },
+        Err(error) => {
+            file = File::open("/home/stas/rust/files/test.csv");
+            file
+        },
+    };
+
+    let f = BufReader::new(f);
+    
+    let mut vectors = vec![];
+    let mut vector = vec![];
+    
+    for line in f.lines() {
+        
+        let line = line.expect("Unable to read line");
+        
+        if line != "" {
+
+            let words: Vec<&str> = line.split(",").collect();
+        
+            for w in words {
+            
+                let n:f32 = w.parse().expect("Not a number!");
+                vector.push(n);
+            
+            }
+        
+            vectors.push(vector);
+            vector = vec![];
+        
+        } else {
+            
+            panic!("Неверное число"); 
+
+        }
+    }
+
+    
+    vectors
+    
+}
+
+fn get_average_vectors(vectors: &Vec<Vec<f32>>,vectors_for: &Vec<Vec<f32>>) -> Vec<Vec<f32>>{
+	
+	let mut list_summ = vec![];
+	
+	let new = vectors_for.clone();
+	
+	for vector in vectors {
+		
+		list_summ.push(summ(vector));
+		
+	}
+	
+	let max:f32;
+	let min:f32;
+	
+	if list_summ[0] > list_summ[1]{
+		
+		max = list_summ[0];
+		min = list_summ[1];
+		
+	} else {
+		
+		max = list_summ[1];
+		min = list_summ[0];
+		
+	}
+	
+	let average = (max + min) / 2.0;
+	
+	let max_average = (average + max) / 2.0;
+	let min_average = (average + min) / 2.0;
+	
+	let mut new_ = vec![];
+	
+	for vector in new {
+		
+		let summ_ = summ(&vector);
+		
+		if summ_ <= max_average && summ_ >= min_average {
+			
+			new_.push(vector);
+			
+		} 
+		
+	}
+	
+	new_
+	
+}
+
+fn get_max_min_vectors(vectors: &Vec<Vec<f32>>) -> Vec<Vec<f32>>{
+	
+	let mut list_summ = vec![];
+	
+	let new = vectors.clone();
+	
+	for vector in vectors {
+		
+		list_summ.push(summ(vector));
+		
+	}
+	
+	let min_key = min_elem_key(&list_summ);
+	let max_key = max_elem_key(&list_summ); 
+	
+	let mut new_ = vec![];
+	
+	let mut i = 0;
+	
+	for n in new{
+		
+		if i == min_key || i == max_key {
+			new_.push(n);
+		}
+		
+		i = i + 1;
+		
+	}
+	
+	new_
+	
+}
+
+fn min_elem_key(vector: &Vec<f32>) -> usize{
+    
+    let mut smallest = vector[0];
+    let mut i = 0;
+    let mut key = 0;
+    
+    for elem in vector{
+        if *elem < smallest { 
+            smallest = *elem;
+            key = i;
+        }
+        i = i + 1;
+    } 
+
+    key
+
+}
+
+fn  max_elem_key(vector: &Vec<f32>) -> usize{
+    
+    let mut largest = vector[0];
+    let mut i = 0;
+    let mut key = 0;
+    
+    for elem in vector{
+        if *elem > largest {
+            largest = *elem;
+            key = i;
+        }
+        i = i + 1;
+    }
+
+    key
+
+}
+
+fn summ(vector: &Vec<f32>)->f32{
+	
+	let mut sum = 0.0;
+	
+	for elem in vector{
+		
+		sum = *elem + sum;
+		
+	}
+	
+	sum
+	
+}
+
+fn get_max_min(vectors: &Vec<Vec<f32>>) -> (f32,f32) {
     
     let mut max = max_elem(&vectors[0]);
     let mut min = min_elem(&vectors[0]);
