@@ -5,8 +5,10 @@
 /web/src/assets/package-lock.json
 /web/src/assets/public/jquery.js
 /web/src/assets/public/bundle.js
-/web/Cargo.lock
+*.lock
+*.csv
 
+/file/*
 /koh/target/*
 /wrap_koh/target/*
 /web/target/*

@@ -5,3 +5,4 @@ authors = ["stas"]
 
 [dependencies]
 rand = "0.6.5"
+rustc-serialize = "0.3.24"
