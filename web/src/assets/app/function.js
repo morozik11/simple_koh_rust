@@ -58,8 +58,12 @@ function show(name){
             contentType: false, 
             success: function(data){
                 
+                data.sort(function(a, b) { 
+                    return a.class - b.class;
+                });
+                
                 console.log(data);
-
+                
             },
             error: function(jqXHR, textStatus, errorThrown){
              

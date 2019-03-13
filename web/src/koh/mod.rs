@@ -40,12 +40,6 @@ pub fn get_average_vectors(vectors: &Vec<Vec<f32>>,vectors_for: &Vec<Vec<f32>>) 
     let max_average = (average + max) / 2.0;
     let min_average = (average + min) / 2.0;
     
-    println!("{}",min);
-    println!("{}",max);
-    
-    println!("{}",min_average);
-    println!("{}",max_average);
-    
     let mut new_ = vec![];
     
     for vector in new {
@@ -59,8 +53,6 @@ pub fn get_average_vectors(vectors: &Vec<Vec<f32>>,vectors_for: &Vec<Vec<f32>>) 
         } 
             
     }
-    
-    println!("{:?}",new_);
     
     new_
     

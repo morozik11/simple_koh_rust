@@ -21,7 +21,6 @@ class App extends React.Component {
 
 	render() {
 		return <main className="clearfix">
-			<Header classNameHeader="header text-center" classNameLogo="" title="GRa.." />
 			<div id="add_wrap">
 				<File_ idWrap={'first_wrap'} classNameWrap={'wrap_files'} title={'Добавить'} classNameInput={'inputs_file'} idInput={'csv_file'} functionOnchange={setFile} />
 				<FilesList_ functionShow={show} classNameList={'files_list'} />

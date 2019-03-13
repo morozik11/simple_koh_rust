@@ -15,7 +15,6 @@ body{
 	font-size: 15px;
 	font-family: "liberation_monoregular", monospace;
 	color: #000;
-	height:100%;
 	border-color: #000;
 	border-width: 5px;
 	border-style: solid;
@@ -32,6 +31,17 @@ main{
 a{
 	color: #000;
 	text-decoration: none;
+}
+
+canvas {
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+.btn-default {
+    font-size: 12px;                
+    padding: 4px;
+    border: none;
 }
 
 #app{
@@ -69,8 +79,9 @@ a{
 }
 
 #add_wrap{
-	width: 50%;
+	width: 100%;
     float: left;
+    margin-top: 100px;
 }
 
 #first_wrap{
