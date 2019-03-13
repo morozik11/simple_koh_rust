@@ -4,9 +4,9 @@ use std::fs::File;
 
 
 pub fn check_leng_vectors(vectors: &Vec<Vec<f32>>) -> bool{
-	
+
     let mut result = true;
-	
+
     match vectors.len() {
         0 => {
             return false;
@@ -20,25 +20,25 @@ pub fn check_leng_vectors(vectors: &Vec<Vec<f32>>) -> bool{
     }
     
     let leng = vectors[0].len();
-		
+
     for v in vectors {
-		
+
         match v.len() == leng {
             false => {
                return false;
             },
             true => {
-                            
+            
             }
         }
-		
+
     }
-	
+
     result
-	
+
 }
 
-pub fn create_vectors(path: &str) -> Result<Vec<Vec<f32>>, Box<Error>>{
+pub fn create_vectors(path: &std::ffi::OsString) -> Result<Vec<Vec<f32>>, Box<Error>>{
     
     let path = Path::new(path);
     

@@ -1,9 +1,12 @@
-extern crate rand;
-extern crate rustc_serialize;
+use rand::Rng;
 
-use self::rand::Rng;
-use koh;
 
+#[derive(RustcDecodable, RustcEncodable, Debug)]
+pub struct ClassVector {
+    vector_normaled: Vec<f32>,
+    vector: Vec<f32>,
+    class: usize,
+}
 
 pub fn get_average_vectors(vectors: &Vec<Vec<f32>>,vectors_for: &Vec<Vec<f32>>) -> Vec<Vec<f32>>{
     
@@ -26,16 +29,22 @@ pub fn get_average_vectors(vectors: &Vec<Vec<f32>>,vectors_for: &Vec<Vec<f32>>) 
         min = list_summ[1];
             
     } else {
-		
-	max = list_summ[1];
-	min = list_summ[0];
-		
+
+    max = list_summ[1];
+    min = list_summ[0];
+
     }
-	
+
     let average = (max + min) / 2.0;
     
     let max_average = (average + max) / 2.0;
     let min_average = (average + min) / 2.0;
+    
+    println!("{}",min);
+    println!("{}",max);
+    
+    println!("{}",min_average);
+    println!("{}",max_average);
     
     let mut new_ = vec![];
     
@@ -43,20 +52,22 @@ pub fn get_average_vectors(vectors: &Vec<Vec<f32>>,vectors_for: &Vec<Vec<f32>>) 
             
         let summ_ = summ(&vector);
             
-        if summ_ <= max_average && summ_ >= min_average {
-                    
+        if summ_ <= min_average && summ_ >= min {
+            
             new_.push(vector);
-                    
+            
         } 
             
     }
     
+    println!("{:?}",new_);
+    
     new_
-	
+    
 }
 
 pub fn get_max_min_vectors(vectors: &Vec<Vec<f32>>) -> Vec<Vec<f32>>{
-	
+    
     let mut list_summ = vec![];
     
     let new = vectors.clone();
@@ -76,16 +87,16 @@ pub fn get_max_min_vectors(vectors: &Vec<Vec<f32>>) -> Vec<Vec<f32>>{
     
     for n in new{
             
-            if i == min_key || i == max_key {
-                    new_.push(n);
-            }
+        if i == min_key || i == max_key {
+            new_.push(n);
+        }
             
-            i = i + 1;
+        i = i + 1;
             
     }
     
     new_
-	
+    
 }
 
 pub fn min_elem_key(vector: &Vec<f32>) -> usize{
@@ -125,17 +136,17 @@ pub fn  max_elem_key(vector: &Vec<f32>) -> usize{
 }
 
 pub fn summ(vector: &Vec<f32>)->f32{
-	
+
     let mut sum = 0.0;
     
     for elem in vector{
             
-            sum = *elem + sum;
+        sum = *elem + sum;
             
     }
     
     sum
-	
+    
 }
 
 pub fn get_max_min(vectors: &Vec<Vec<f32>>) -> (f32,f32) {
@@ -220,6 +231,21 @@ pub fn normalize(vector: &Vec<f32>, a_b: &(f32,f32)) -> Vec<f32> {
     }
 
     new_vector
+    
+}
+
+pub fn wrap_un_normalize(vectors: &Vec<Vec<f32>>,vect: &mut Vec<ClassVector>){
+    
+    let new = vectors.clone();
+    let mut i = 0;
+    
+    for n in new{
+            
+        vect[i].vector = n;
+            
+        i = i + 1;
+            
+    }
     
 }
 
@@ -348,7 +374,8 @@ pub fn classification(vs_trained: &mut Vec<Vec<f32>>, vs: &mut Vec<Vec<f32>>) ->
         }
         
         let mut smallest = search_min(&store);
-        let obj = ClassVector { vector : v,class : smallest.1 };
+        let vec = vec![0.0];
+        let obj = ClassVector { vector_normaled : v,class : smallest.1, vector: vec };
         
         result.push(obj);
         
