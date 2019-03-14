@@ -11,7 +11,6 @@ html{
 }
 
 body{
-	background-color: #efd6cd;
 	font-size: 15px;
 	font-family: "liberation_monoregular", monospace;
 	color: #000;
@@ -34,8 +33,10 @@ a{
 }
 
 canvas {
+    margin: 0 auto;
     margin-top: 100px;
     margin-bottom: 100px;
+    display: block;
 }
 
 .btn-default {
@@ -88,7 +89,7 @@ canvas {
 	width: 100%;
 	text-align: center;
 	font-size: 25px;
-	background-color: #e7d9e8;
+	background-color: #d0d0d0;
 	padding: 10px 0;
 	border-bottom-style: solid;
 	box-shadow: 0px 0px 1px black;
